@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/css/bootstrap.min.css" />
+
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                <h1>Obrigado</h1>
+                <p th:text="(${result} ? 'Seus dados foram obtidos com sucesso' : 'Houve algum problema e não foi possível salvar seus dados')"></p>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  http://stackoverflow.com/a/37272115 -->
+<!-- https://github.com/spring-projects/spring-boot/issues/1434#issuecomment-53287909 -->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <property name="LOG_PATH" value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}" />
+
+    <timestamp key="startTimestamp" datePattern="yyyyMMddHHmmssSSS"/>
+
+    <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_PATH}/coletor-${startTimestamp}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/coletor-${startTimestamp}.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="ROLLING-FILE"/>
+    </root>
+
+    <logger name="br.edu.fatecsbc.sigapi" level="INFO"/>
+    <logger name="org.springframework.security" level="INFO"/>
+
+</configuration>

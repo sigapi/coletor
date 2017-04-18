@@ -1,0 +1,12 @@
+.autoenv.zsh
+
+# Eclipse
+.classpath
+.project
+.settings/
+eclipse/org.eclipse.core.resources.prefs
+eclipse/org.eclipse.ltk.core.refactoring.prefs
+eclipse/org.eclipse.wst.validation.prefs
+
+# Maven
+target/

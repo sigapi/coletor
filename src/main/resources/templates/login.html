@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>sigapi - coletor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                <h1>sigapi</h1>
+                <p class="lead">
+                    O sigapi é um projeto que consiste na implementação de uma API para extração de dados, apenas do perfil aluno, do <a href="https://www.sigacentropaulasouza.com.br/aluno/login.aspx">Sistema Integrado de Gestão Acadêmica</a> do <a href="http://www.cps.sp.gov.br/">Centro Paula Souza</a>
+                    <br/><br/>
+                    Essa aplicação tem o objetivo de coletar os dados de alunos voluntários com a intenção de refinar a implementação do nosso parser.
+                    <br/><br/>
+                    As credenciais de acesso, usuário e senha, não são armazenadas. Além disso os dados de identificação (nome e RA) são removidos do arquivo salvo. O nome do aluno é apenas armazenado para que ele seja incluído no nos agradecimentos do projeto.
+                    <br/><br/>
+                    Ao fornecer as suas credenciais, você estará concordando com os termos expostos.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 text-center">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Entrar</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="loginModalLabel">Credenciais</h4>
+                </div> <!-- /.modal-header -->
+
+                <div class="modal-body">
+
+                    <form role="form" th:action="@{/}" th:object="${login}" method="post">
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" th:field="*{usuario}" class="form-control" id="inputTextUsuario" placeholder="Usuário"/>
+                                <label for="inputTextUsuario" class="input-group-addon glyphicon glyphicon-user"></label>
+                            </div>
+                        </div> <!-- /.form-group -->
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="password" th:field="*{senha}" class="form-control" id="inputPasswordSenha" placeholder="Senha"/>
+                                <label for="inputPasswordSenha" class="input-group-addon glyphicon glyphicon-lock"></label>
+                            </div> <!-- /.input-group -->
+                        </div> <!-- /.form-group -->
+
+                    </form>
+
+                </div> <!-- /.modal-body -->
+
+                <div class="modal-footer">
+                    <button class="form-control btn btn-primary">Entrar</button>
+
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%" id="progressinner">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+
+                </div> <!-- /.modal-footer -->
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/login.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+server:
+  display-name: coletor
+
+spring:
+
+  main:
+    banner-mode: "off"
+
+  thymeleaf:
+    mode: LEGACYHTML5
+
+logging:
+  path: /tmp/sigapi/logs
+
+sigapi:
+  diretorio: /tmp/sigapi/sigapi/
