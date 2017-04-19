@@ -25,6 +25,8 @@ public class ColetorService {
     private static final Logger log = LoggerFactory.getLogger(ColetorService.class);
 
     private static final String ARQUIVO_PARTICIPANTES = "participantes.csv";
+    private static final String ENCODING = "UTF-8";
+    private static final String PATTERN_EMAIL = "([^.@\\s]+)(\\.[^.@\\s]+)*@([^.@\\s]+\\.)+([^.@\\s]+)";
 
     @Value("${sigapi.coletor.diretorio:/tmp/sigapi/coletor}")
     private String caminhoDiretorioRaiz;
@@ -57,20 +59,21 @@ public class ColetorService {
             final String periodo = client.findElement(By.id("span_vACD_PERIODODESCRICAO_MPAGE")).getText();
 
             log.info("Conectado com o aluno {} da {}", nome, instituicao);
-            System.out.println(instituicao);
 
             final File arquivoParticipantes = new File(diretorioRaiz, ARQUIVO_PARTICIPANTES);
             try {
-                FileUtils.writeStringToFile(arquivoParticipantes,
-                    String.format("%s;%s;%s;%s;%5$tF %5$tR %n", nome, instituicao, curso, periodo, new Date()), true);
+                final String participante = String.format("%s;%s;%s;%s;%5$tF %5$tR %n", nome, instituicao, curso,
+                    periodo, new Date());
+                FileUtils.writeStringToFile(arquivoParticipantes, participante, ENCODING, true);
                 log.info("Arquivo de participantes atualizado: {}", arquivoParticipantes.getAbsolutePath());
             } catch (final IOException e) {
                 log.error("Erro escrevendo no arquivo de participantes", e);
             }
 
             final int hash = new HashCodeBuilder().append(nome).append(ra).append(new Date()).toHashCode();
-            final File diretorioUsuario = new File(diretorioRaiz,
-                "dados/" + instituicao + "/" + curso + "/" + periodo + "/" + hash);
+            final String dirDados = StringUtils
+                .stripAccents("dados/" + instituicao + "/" + curso + "/" + periodo + "/" + hash);
+            final File diretorioUsuario = new File(diretorioRaiz, dirDados);
             diretorioUsuario.mkdirs();
 
             for (final PAGE p : PAGE.values()) {
@@ -86,10 +89,22 @@ public class ColetorService {
 
                 final File arquivoTemp = new File(diretorioUsuario, p.getUrl());
                 try {
+
+                    final String hashString = String.valueOf(hash);
+
+                    // Obtém o código fonte da página
                     String source = client.getPageSource();
+
+                    // Substitui nome e RA
                     source = StringUtils.replaceEach(source, new String[] { nome, ra },
-                        new String[] { String.valueOf(hash), String.valueOf(hash) });
-                    FileUtils.writeStringToFile(arquivoTemp, source);
+                        new String[] { hashString, hashString });
+
+                    // Substitui email
+                    // source = StringUtils.replacePattern(source, PATTERN_EMAIL, hashString + "@email.com");
+
+                    // Escreve no arquivo
+                    FileUtils.writeStringToFile(arquivoTemp, source, ENCODING);
+
                 } catch (final IOException e) {
                     log.error("Erro salvando a pagina {} do aluno {}", p.name(), nome, e);
                     continue;

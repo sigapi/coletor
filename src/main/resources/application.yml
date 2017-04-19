@@ -3,6 +3,8 @@ server:
 
 spring:
 
+  mandatory-file-encoding: UTF-8
+
   main:
     banner-mode: "off"
 
