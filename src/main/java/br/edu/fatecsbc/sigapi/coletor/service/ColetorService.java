@@ -26,7 +26,7 @@ public class ColetorService {
 
     private static final String ARQUIVO_PARTICIPANTES = "participantes.csv";
 
-    @Value("${sigapi.diretorio:/tmp/sigapi}")
+    @Value("${sigapi.coletor.diretorio:/tmp/sigapi/coletor}")
     private String caminhoDiretorioRaiz;
 
     public boolean execute(final Login login) {
@@ -35,7 +35,7 @@ public class ColetorService {
 
     public boolean execute(final String usuario, final String senha) {
 
-        final File diretorioRaiz = new File(caminhoDiretorioRaiz, "coletor");
+        final File diretorioRaiz = new File(caminhoDiretorioRaiz);
         diretorioRaiz.mkdirs();
 
         final SigaClient client = new SigaClient();
@@ -56,7 +56,8 @@ public class ColetorService {
             final String curso = client.findElement(By.id("span_vACD_CURSONOME_MPAGE")).getText();
             final String periodo = client.findElement(By.id("span_vACD_PERIODODESCRICAO_MPAGE")).getText();
 
-            log.info("Conectado com o aluno {}", nome);
+            log.info("Conectado com o aluno {} da {}", nome, instituicao);
+            System.out.println(instituicao);
 
             final File arquivoParticipantes = new File(diretorioRaiz, ARQUIVO_PARTICIPANTES);
             try {
@@ -69,7 +70,7 @@ public class ColetorService {
 
             final int hash = new HashCodeBuilder().append(nome).append(ra).append(new Date()).toHashCode();
             final File diretorioUsuario = new File(diretorioRaiz,
-                instituicao + "/" + curso + "/" + periodo + "/" + hash);
+                "dados/" + instituicao + "/" + curso + "/" + periodo + "/" + hash);
             diretorioUsuario.mkdirs();
 
             for (final PAGE p : PAGE.values()) {

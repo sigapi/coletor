@@ -10,7 +10,8 @@ spring:
     mode: LEGACYHTML5
 
 logging:
-  path: /tmp/sigapi/logs
+  file: ${user.home}/sigapi/logs/coletor.log
 
 sigapi:
-  diretorio: /tmp/sigapi/sigapi/
+  coletor:
+    diretorio: ${user.home}/sigapi/coletor
