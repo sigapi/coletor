@@ -3,7 +3,9 @@ package br.edu.fatecsbc.sigapi.coletor.selenium;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -32,23 +34,62 @@ public class SigaClient
 
     private static final String ERROR_MESSAGE_LOGIN = "Não confere Login e Senha";
 
+    private class WaitToJsCondition
+        implements ExpectedCondition<Boolean> {
+
+        @Override
+        public Boolean apply(final WebDriver driver) {
+            return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+        }
+
+    }
+
     public enum PAGE {
 
         AVISOS("Avisos", "home.aspx"),
+
+        EMAILS(By.name("Embpage1"), AVISOS),
+
         CALENDARIO_PROVAS("Calendário de Provas", "calendarioprovas.aspx"),
+
         FALTAS_PARCIAIS("Faltas Parciais", "faltasparciais.aspx"),
+
         HISTORICO_GRADE("Histórico (Grade)", "historicograde.aspx"),
-        HISTORIICO_COMPLETO("Histórico Completo", "historicocompleto.aspx"),
+
+        HISTORICO_COMPLETO("Histórico Completo", "historicocompleto.aspx"),
+
         HISTORICO("Histórico", "historico.aspx"),
+
         HORARIO("Horário", "horario.aspx"),
+
         NOTAS_PARCIAIS("Notas Parciais", "notasparciais.aspx");
 
+        private final By frame;
+        private final PAGE parentPage;
         private final String label;
         private final String url;
 
+        private PAGE(final By frame, final PAGE parentPage) {
+            this(frame, parentPage, null, null);
+        }
+
         private PAGE(final String label, final String url) {
+            this(null, null, label, url);
+        }
+
+        private PAGE(final By frame, final PAGE parentPage, final String label, final String url) {
+            this.frame = frame;
+            this.parentPage = parentPage;
             this.label = label;
             this.url = url;
+        }
+
+        public By getFrame() {
+            return frame;
+        }
+
+        public PAGE getParentPage() {
+            return parentPage;
         }
 
         public String getLabel() {
@@ -57,6 +98,10 @@ public class SigaClient
 
         public String getUrl() {
             return url;
+        }
+
+        public boolean isFrame() {
+            return frame != null;
         }
 
     }
@@ -117,16 +162,47 @@ public class SigaClient
             throw new IllegalStateException("Não está logado");
         }
 
-        if (currentPage == newPage) {
-            return;
+        if (currentPage.isFrame()) {
+            switchTo().defaultContent();
         }
 
-        findElementByLinkText(newPage.getLabel()).click();
+        PAGE destination = newPage;
+        if (newPage.isFrame()) {
+            destination = newPage.getParentPage();
+        }
+
+        if (currentPage != destination) {
+
+            // Clica no link
+            findElementByLinkText(destination.getLabel()).click();
+            try {
+                // Aguarda o carregamento da URL
+                wait(ExpectedConditions.urlContains(newPage.getUrl()));
+            } catch (final WaitException e) {
+                logged = false;
+                throw new SigaInacessivelException("Erro inesperado indo para a página " + newPage.name(), e);
+            }
+
+        }
+
         try {
-            wait(ExpectedConditions.urlContains(newPage.getUrl()));
+            // Aguarda o carregamento do Javascript
+            wait(new WaitToJsCondition());
         } catch (final WaitException e) {
             logged = false;
-            throw new SigaInacessivelException("Erro inesperado indo para a página " + newPage.name(), e);
+            throw new SigaInacessivelException("Erro inesperado aguardando o carregamento da página " + newPage.name(),
+                e);
+        }
+
+        if (newPage.isFrame()) {
+
+            try {
+                wait(ExpectedConditions.frameToBeAvailableAndSwitchToIt(newPage.getFrame()));
+            } catch (final WaitException e) {
+                throw new SigaInacessivelException(
+                    "Erro inesperado tentando obter o conteúdo de um frame da página " + newPage.name(), e);
+            }
+
         }
 
         currentPage = newPage;

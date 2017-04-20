@@ -87,20 +87,20 @@ public class ColetorService {
                     continue;
                 }
 
-                final File arquivoTemp = new File(diretorioUsuario, p.getUrl());
+                final File arquivoTemp = new File(diretorioUsuario, p.name());
                 try {
 
                     final String hashString = String.valueOf(hash);
 
                     // Obtém o código fonte da página
-                    String source = client.getPageSource();
+                    String source = (String) client.executeScript("return document.documentElement.outerHTML;");
 
                     // Substitui nome e RA
                     source = StringUtils.replaceEach(source, new String[] { nome, ra },
                         new String[] { hashString, hashString });
 
-                    // Substitui email
-                    // source = StringUtils.replacePattern(source, PATTERN_EMAIL, hashString + "@email.com");
+                    // Substitui o email
+                    source = StringUtils.replacePattern(source, PATTERN_EMAIL, String.format("%1$s@%1$s", hashString));
 
                     // Escreve no arquivo
                     FileUtils.writeStringToFile(arquivoTemp, source, ENCODING);
