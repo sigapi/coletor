@@ -19,7 +19,6 @@ public class LoginController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String loginForm(final Model model) {
         model.addAttribute("login", new Login());
-        model.addAttribute("xpto", "ABC");
         return "login";
     }
 
@@ -28,7 +27,6 @@ public class LoginController {
 
         final boolean result = service.execute(login);
         model.addAttribute("result", result);
-        model.addAttribute("xpto", "ABC");
 
         return "result";
 
