@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.machinepublishers.jbrowserdriver.JBrowserDriver;
+import com.machinepublishers.jbrowserdriver.Settings;
 
 import br.edu.fatecsbc.sigapi.coletor.service.CredenciaisInvalidasException;
 import br.edu.fatecsbc.sigapi.coletor.service.SigaInacessivelException;
@@ -119,9 +120,18 @@ public class SigaClient
     private boolean logged = false;
 
     public SigaClient(final int implicityTimeout) {
-        super();
+        super(createSettings());
         this.implicityTimeout = implicityTimeout;
         turnOnImplicitWaits();
+    }
+
+    private static Settings createSettings() {
+        // @formatter:off
+        return Settings.builder()
+            .cache(false)
+            .logger(null)
+            .build();
+        // @formatter:on
     }
 
     public SigaClient() {

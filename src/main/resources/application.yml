@@ -2,18 +2,39 @@ server:
   display-name: coletor
 
 spring:
-
   mandatory-file-encoding: UTF-8
-
   main:
     banner-mode: "off"
-
   thymeleaf:
     mode: LEGACYHTML5
-
-logging:
-  file: ${user.home}/sigapi/logs/coletor.log
 
 sigapi:
   coletor:
     diretorio: ${user.home}/sigapi/coletor
+
+logging:
+
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint}[%clr(%.-1level)]%clr(%logger){cyan}%clr(:){faint}%m%n%ex"
+
+  level:
+    root: DEBUG
+
+    br.edu.fatecsbc.sigapi.coletor: INFO
+
+    org:
+      apache:
+        tomcat: ERROR
+        catalina: ERROR
+        coyote: ERROR
+
+      jboss: ERROR
+
+      hibernate: ERROR
+
+      springframework: INFO
+
+      zeroturnaround: ERROR
+
+    sun:
+      rmi: ERROR
