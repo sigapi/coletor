@@ -22,6 +22,9 @@ logging:
 
     br.edu.fatecsbc.sigapi.coletor: INFO
 
+    javax:
+      activation: ERROR
+
     org:
       apache:
         tomcat: ERROR
