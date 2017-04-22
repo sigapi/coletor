@@ -43,6 +43,10 @@ $(document).ready(function(){
         }
     });
 
+    $('#loginModal').on('hidden.bs.modal', function (e) {
+        ga('send', 'event', 'modal', 'hide', 'login');
+    });
+
     $('#loginModal').on('shown.bs.modal', function (e) {
 
         var progressBar = $('.progress');
@@ -53,6 +57,8 @@ $(document).ready(function(){
         button.show();
         inputs.removeAttr("disabled");
         inputs.val("");
+
+        ga('send', 'event', 'modal', 'show', 'login');
 
     });
 
