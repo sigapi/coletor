@@ -17,7 +17,7 @@ Vagrant.configure(2) do |config|
 
         google.name = "coletor"
         google.image = "ubuntu-1604-xenial-v20170327"
-        google.machine_type = "f1-micro"
+        google.machine_type = "g1-small"
         google.zone = "us-east1-b"
         google.external_ip = "35.185.97.23"
         google.can_ip_forward = true
