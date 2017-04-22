@@ -37,6 +37,11 @@ public class ColetorService {
 
     public boolean execute(final String usuario, final String senha) {
 
+        if (StringUtils.isAnyBlank(usuario, senha)) {
+            log.warn("Usuário ({}) ou senha em brancos", usuario);
+            return false;
+        }
+
         final File diretorioRaiz = new File(caminhoDiretorioRaiz);
         diretorioRaiz.mkdirs();
 
@@ -62,8 +67,7 @@ public class ColetorService {
 
             final File arquivoParticipantes = new File(diretorioRaiz, ARQUIVO_PARTICIPANTES);
             try {
-                final String participante = String.format("%s;%s;%s;%s;%5$tF %5$tR %n", nome, instituicao, curso,
-                    periodo, new Date());
+                final String participante = String.format("%s;%s;%s;%s%n", nome, instituicao, curso, periodo);
                 FileUtils.writeStringToFile(arquivoParticipantes, participante, ENCODING, true);
                 log.info("Arquivo de participantes atualizado: {}", arquivoParticipantes.getAbsolutePath());
             } catch (final IOException e) {
