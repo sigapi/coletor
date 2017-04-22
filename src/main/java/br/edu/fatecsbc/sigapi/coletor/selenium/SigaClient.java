@@ -2,10 +2,11 @@ package br.edu.fatecsbc.sigapi.coletor.selenium;
 
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,6 +20,8 @@ import br.edu.fatecsbc.sigapi.coletor.service.SigapiException;
 
 public class SigaClient
     extends JBrowserDriver {
+
+    private static final Logger log = LoggerFactory.getLogger(SigaClient.class);
 
     private static final int DEFAULT_TIMEOUT = 15;
     private static final int DEFAULT_IMPLICITY_TIMEOUT = 15;
@@ -34,16 +37,6 @@ public class SigaClient
     private static final String ELEMENT_ID_LOGIN_TXT_ERROR = "gxErrorViewer";
 
     private static final String ERROR_MESSAGE_LOGIN = "Não confere Login e Senha";
-
-    private class WaitToJsCondition
-        implements ExpectedCondition<Boolean> {
-
-        @Override
-        public Boolean apply(final WebDriver driver) {
-            return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
-        }
-
-    }
 
     public enum PAGE {
 
@@ -189,19 +182,9 @@ public class SigaClient
                 // Aguarda o carregamento da URL
                 wait(ExpectedConditions.urlContains(newPage.getUrl()));
             } catch (final WaitException e) {
-                logged = false;
                 throw new SigaInacessivelException("Erro inesperado indo para a página " + newPage.name(), e);
             }
 
-        }
-
-        try {
-            // Aguarda o carregamento do Javascript
-            wait(new WaitToJsCondition());
-        } catch (final WaitException e) {
-            logged = false;
-            throw new SigaInacessivelException("Erro inesperado aguardando o carregamento da página " + newPage.name(),
-                e);
         }
 
         if (newPage.isFrame()) {
@@ -259,11 +242,18 @@ public class SigaClient
         try {
             return ExpectedConditions.visibilityOfElementLocated(by).apply(this) != null;
         } catch (final NoSuchElementException e) {
+            log.warn(e.getMessage());
             return false;
         } finally {
             turnOnImplicitWaits();
         }
 
+    }
+
+    @Override
+    public void quit() {
+        logged = false;
+        super.quit();
     }
 
     private void turnOffImplicitWaits() {
