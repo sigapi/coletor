@@ -68,6 +68,19 @@
             <plugins>
 
                 <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>1.5.2.RELEASE</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.springframework.boot.experimental</groupId>
+                            <artifactId>spring-boot-thin-layout</artifactId>
+                            <version>1.0.0.RELEASE</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>${plugin.maven-clean-plugin}</version>
                 </plugin>

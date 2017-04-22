@@ -24,5 +24,5 @@ fi
 # Iniciando execução atual
 echo "Iniciando..."
 cd ${dir}
-nohup java -Dspring.profiles.active=prod -jar coletor.jar &
+nohup java -Dthin.root=${dir}/mvn -Dspring.profiles.active=prod -jar coletor.jar &
 sleep 5s
