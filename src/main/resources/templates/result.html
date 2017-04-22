@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" th:href="@{webjars/font-awesome/css/font-awesome.min.css}" />
 
 </head>
 <body>
@@ -13,9 +14,16 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-md-6 col-md-offset-3 text-center">
+            <div class="col-xs-12 text-center">
                 <h1>Obrigado</h1>
-                <p th:text="(${result} ? 'Seus dados foram obtidos com sucesso' : 'Houve algum problema e não foi possível salvar seus dados')"></p>
+                <p th:if="${result}">
+                    Seus dados foram salvos com sucesso
+                    <i class="fa fa-smile-o" aria-hidden="true"></i>
+                </p>
+                <p th:unless="${result}">
+                    Houve algum problema e não foi possível salvar seus dados
+                    <i class="fa fa-frown-o" aria-hidden="true"></i>
+                </p>
             </div>
         </div>
 

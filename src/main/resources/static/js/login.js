@@ -23,6 +23,7 @@ function animateloop () {
 $(document).ready(function(){
 
     $('.modal-footer button').click(function(){
+
         var button = $(this);
 
         if ( button.attr("data-dismiss") != "modal" ){
@@ -42,13 +43,19 @@ $(document).ready(function(){
         }
     });
 
-    $('#loginModal').on('hidden.bs.modal', function (e) {
+    $('#loginModal').on('shown.bs.modal', function (e) {
 
         var progressBar = $('.progress');
         var button = $('.modal-footer button');
+        var inputs = $('form input');
 
         progressBar.hide();
         button.show();
+        inputs.removeAttr("disabled");
+        inputs.val("");
 
     });
+
+
+
 });
