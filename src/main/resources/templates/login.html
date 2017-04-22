@@ -20,6 +20,12 @@
             background-position: 150% 50% !important;
         }
 
+        .modal-footer .progress {
+            display: none;
+            height: 32px;
+            margin: 0;
+        }
+
     </style>
 
     <script>
@@ -121,7 +127,7 @@
                 <div class="modal-footer">
                     <button class="form-control btn btn-success" onclick="ga('send', 'event', 'button', 'click', 'login-ok');">OK</button>
 
-                    <div class="progress hidden">
+                    <div class="progress">
                         <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%" id="progressinner">
                             <span class="sr-only">Carregando...</span>
                         </div>
