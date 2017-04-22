@@ -13,7 +13,7 @@
     <parent>
         <groupId>io.spring.platform</groupId>
         <artifactId>platform-bom</artifactId>
-        <version>2.0.8.RELEASE</version>
+        <version>Brussels-SR1</version>
         <relativePath/>
     </parent>
 
@@ -21,7 +21,7 @@
 
         <revision>development-SNAPSHOT</revision>
 
-        <project.maven>3.3.9</project.maven>
+        <project.maven>3.3</project.maven>
         <project.java>1.8</project.java>
 
         <project.encoding>UTF-8</project.encoding>
@@ -34,11 +34,11 @@
         <plugin.maven-install-plugin>2.5.2</plugin.maven-install-plugin>
         <plugin.maven-jar-plugin>3.0.2</plugin.maven-jar-plugin>
         <plugin.maven-resources-plugin>3.0.2</plugin.maven-resources-plugin>
-        <plugin.maven-surefire-plugin>2.19.1</plugin.maven-surefire-plugin>
+        <plugin.maven-surefire-plugin>2.20</plugin.maven-surefire-plugin>
 
         <plugin.maven-enforcer-plugin>1.4.1</plugin.maven-enforcer-plugin>
         <plugin.maven-enforcer-plugin.java-version>[1.8, 1.9)</plugin.maven-enforcer-plugin.java-version>
-        <plugin.maven-enforcer-plugin.maven-version>[${project.maven}]</plugin.maven-enforcer-plugin.maven-version>
+        <plugin.maven-enforcer-plugin.maven-version>[3.3, 3.4)</plugin.maven-enforcer-plugin.maven-version>
 
         <plugin.animal-sniffer-maven-plugin>1.15</plugin.animal-sniffer-maven-plugin>
         <plugin.animal-sniffer-maven-plugin.signature.groupId>org.codehaus.mojo.signature</plugin.animal-sniffer-maven-plugin.signature.groupId>
@@ -50,8 +50,11 @@
         <plugin.maven-eclipse-plugin.downloadJavadocs>true</plugin.maven-eclipse-plugin.downloadJavadocs>
         <plugin.maven-eclipse-plugin.downloadSources>true</plugin.maven-eclipse-plugin.downloadSources>
 
-        <!-- Dependências Spring -->
-        <tomcat.version>7.0.54</tomcat.version>
+        <dependency.jbrowserdriver>0.17.7</dependency.jbrowserdriver>
+        <dependency.selenium>2.53.0</dependency.selenium>
+
+        <webjars.bootstrap>3.3.7-1</webjars.bootstrap>
+        <webjars.jquery>1.11.1</webjars.jquery>
 
     </properties>
 
@@ -62,14 +65,6 @@
         <pluginManagement>
 
             <plugins>
-
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <configuration>
-                        <jvmArguments>-Dfile.encoding=${project.encoding}</jvmArguments>
-                    </configuration>
-                </plugin>
 
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
@@ -86,25 +81,21 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${plugin.maven-deploy-plugin}</version>
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
                     <version>${plugin.maven-install-plugin}</version>
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${plugin.maven-jar-plugin}</version>
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${plugin.maven-surefire-plugin}</version>
                     <configuration>
@@ -113,13 +104,11 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${plugin.maven-resources-plugin}</version>
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>${plugin.maven-enforcer-plugin}</version>
 
@@ -178,7 +167,6 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-eclipse-plugin</artifactId>
                     <version>${plugin.maven-eclipse-plugin}</version>
 
@@ -232,7 +220,6 @@
         <plugins>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
 
@@ -258,16 +245,29 @@
         </dependency>
 
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>3.3.7-1</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <!-- ======================================================================================================= -->
+        <!-- Selenium -->
+        <!-- ======================================================================================================= -->
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-support</artifactId>
+            <version>${dependency.selenium}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery</artifactId>
-            <version>1.11.1</version>
+            <groupId>com.machinepublishers</groupId>
+            <artifactId>jbrowserdriver</artifactId>
+            <version>${dependency.jbrowserdriver}</version>
         </dependency>
+
+        <!-- ======================================================================================================= -->
+        <!-- Thymeleaf -->
+        <!-- ======================================================================================================= -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -275,16 +275,13 @@
         </dependency>
 
         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-support</artifactId>
-            <version>2.53.0</version>
-        </dependency>
+             <groupId>net.sourceforge.nekohtml</groupId>
+             <artifactId>nekohtml</artifactId>
+         </dependency>
 
-        <dependency>
-            <groupId>com.machinepublishers</groupId>
-            <artifactId>jbrowserdriver</artifactId>
-            <version>0.17.7</version>
-        </dependency>
+        <!-- ======================================================================================================= -->
+        <!-- Webjars -->
+        <!-- ======================================================================================================= -->
 
         <dependency>
             <groupId>org.webjars</groupId>
@@ -292,13 +289,15 @@
         </dependency>
 
         <dependency>
-             <groupId>net.sourceforge.nekohtml</groupId>
-             <artifactId>nekohtml</artifactId>
-         </dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${webjars.bootstrap}</version>
+        </dependency>
 
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${webjars.jquery}</version>
         </dependency>
 
     </dependencies>
