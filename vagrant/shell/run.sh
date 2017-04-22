@@ -1,8 +1,8 @@
 #!/bin/bash
 
-dir=/sigapi
 fuser -v -n tcp 80 && fuser -k 80/tcp
 
+dir=/sigapi
 rm -rf ${dir}
 mkdir -p ${dir}
 cp /tmp/sigapi/coletor.jar ${dir}/
