@@ -97,7 +97,7 @@ public class ColetorService {
                     final String hashString = String.valueOf(hash);
 
                     // Obtém o código fonte da página
-                    String source = (String) client.executeScript("return document.documentElement.outerHTML;");
+                    String source = client.getPageSource();
 
                     // Substitui nome e RA
                     source = StringUtils.replaceEach(source, new String[] { nome, ra },
