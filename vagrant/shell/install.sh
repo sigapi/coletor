@@ -5,8 +5,14 @@ then
 
   export DEBIAN_FRONTEND=noninteractive # http://serverfault.com/a/670688
 
-  # OpenJDK + OpenJFXX
-  apt-get install -yq openjdk-8-jdk openjfx
+  # Pacotes
+  apt-get install -yq \
+    curl \
+    openjdk-8-jdk \ #OpenJDK
+    openjfx \ #OpenJFX
+    tree \
+    unzip \
+    zip
 
   # Timezone
   timedatectl set-timezone America/Sao_Paulo
