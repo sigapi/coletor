@@ -25,7 +25,12 @@ public class LoginController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public String loginSubmit(@ModelAttribute final Login login, final Model model) {
 
-        final boolean result = service.execute(login);
+        final boolean result = service.connect(login);
+
+        if (result) {
+            service.save(login);
+        }
+
         model.addAttribute("result", result);
 
         return "result";

@@ -2,9 +2,6 @@ package br.edu.fatecsbc.sigapi.coletor.selenium;
 
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -21,10 +18,8 @@ import br.edu.fatecsbc.sigapi.coletor.service.SigapiException;
 public class SigaClient
     extends JBrowserDriver {
 
-    private static final Logger log = LoggerFactory.getLogger(SigaClient.class);
-
-    private static final int DEFAULT_TIMEOUT = 15;
-    private static final int DEFAULT_IMPLICITY_TIMEOUT = 15;
+    private static final int DEFAULT_TIMEOUT = 30;
+    private static final int DEFAULT_IMPLICITY_TIMEOUT = 30;
 
     private static final String URL_LOGIN = "https://www.sigacentropaulasouza.com.br/aluno/login.aspx";
 
@@ -112,6 +107,10 @@ public class SigaClient
     private PAGE currentPage;
     private boolean logged = false;
 
+    public SigaClient() {
+        this(DEFAULT_IMPLICITY_TIMEOUT);
+    }
+
     public SigaClient(final int implicityTimeout) {
         super(createSettings());
         this.implicityTimeout = implicityTimeout;
@@ -125,10 +124,6 @@ public class SigaClient
             .logger(null)
             .build();
         // @formatter:on
-    }
-
-    public SigaClient() {
-        this(DEFAULT_IMPLICITY_TIMEOUT);
     }
 
     public void login(final String usuario, final String senha) throws SigapiException {
@@ -242,7 +237,6 @@ public class SigaClient
         try {
             return ExpectedConditions.visibilityOfElementLocated(by).apply(this) != null;
         } catch (final NoSuchElementException e) {
-            log.warn(e.getMessage());
             return false;
         } finally {
             turnOnImplicitWaits();
