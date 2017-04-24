@@ -120,7 +120,7 @@ public class ColetorService {
             final String curso = client.findElement(By.id("span_vACD_CURSONOME_MPAGE")).getText();
             final String periodo = client.findElement(By.id("span_vACD_PERIODODESCRICAO_MPAGE")).getText();
 
-            log.info("Conectado com o aluno '{}'", nome);
+            log.info("Conectado com o usuário '{}'", usuario);
 
             // Atualiza o arquivo de participantes
             final File arquivoParticipantes = new File(diretorioRaiz, ARQUIVO_PARTICIPANTES);
@@ -143,10 +143,13 @@ public class ColetorService {
 
             // Salva página por página
             for (final PAGE p : PAGE.values()) {
-                savePage(client, nome, foto, ra, hash, diretorioUsuario, p);
+                savePage(client, usuario, nome, foto, ra, hash, diretorioUsuario, p);
             }
 
         } finally {
+
+            log.info("Encerrandoc conexão do usuário '{}'", usuario);
+
             if (client != null) {
                 client.quit();
             }
@@ -154,10 +157,10 @@ public class ColetorService {
 
     }
 
-    private void savePage(final SigaClient client, final String nome, final String foto, final String ra,
-        final int hash, final File diretorioUsuario, final PAGE p) {
+    private void savePage(final SigaClient client, final String usuario, final String nome, final String foto,
+        final String ra, final int hash, final File diretorioUsuario, final PAGE p) {
 
-        log.info("Salvando pagina {} do aluno {}", p.name(), nome);
+        log.info("Salvando página {} do usuário {}", p.name(), usuario);
 
         // Transforma o hash para string
         final String hashString = String.valueOf(hash);
@@ -181,9 +184,9 @@ public class ColetorService {
             FileUtils.writeStringToFile(new File(diretorioUsuario, p.name()), source, ENCODING);
 
         } catch (final SigaInacessivelException e) {
-            log.error("Erro acessando a pagina {} do aluno {}", p.name(), nome, e);
+            log.error("Erro acessando a página {} do usuário {}", p.name(), usuario, e);
         } catch (final IOException e) {
-            log.error("Erro salvando a pagina {} do aluno {}", p.name(), nome, e);
+            log.error("Erro salvando a página {} do usuário {}", p.name(), usuario, e);
         }
     }
 
