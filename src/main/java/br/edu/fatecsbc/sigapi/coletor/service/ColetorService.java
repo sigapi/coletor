@@ -132,23 +132,24 @@ public class ColetorService {
                 log.error("Erro escrevendo no arquivo de participantes", e);
             }
 
-            // Cria o hash baseado no nome, RA e data
-            final int hash = new HashCodeBuilder().append(nome).append(ra).append(new Date()).toHashCode();
+            // Cria o hash
+            final int hash = criarHash(nome, ra);
 
             // Cria o diretório de dados
             final String dirDados = StringUtils
                 .stripAccents("dados/" + instituicao + "/" + curso + "/" + periodo + "/" + hash);
+
             final File diretorioUsuario = new File(diretorioRaiz, dirDados);
             diretorioUsuario.mkdirs();
 
             // Salva página por página
             for (final PAGE p : PAGE.values()) {
-                savePage(client, usuario, nome, foto, ra, hash, diretorioUsuario, p);
+                savePage(client, usuario, nome, foto, ra, diretorioUsuario, p);
             }
 
         } finally {
 
-            log.info("Encerrandoc conexão do usuário '{}'", usuario);
+            log.info("Encerrando conexão do usuário '{}'", usuario);
 
             if (client != null) {
                 client.quit();
@@ -157,8 +158,14 @@ public class ColetorService {
 
     }
 
+    private int criarHash(final String nome, final String ra) {
+        return new HashCodeBuilder().append(nome).append(ra).append(new Date()).toHashCode();
+    }
+
     private void savePage(final SigaClient client, final String usuario, final String nome, final String foto,
-        final String ra, final int hash, final File diretorioUsuario, final PAGE p) {
+        final String ra, final File diretorioUsuario, final PAGE p) {
+
+        final int hash = criarHash(nome, ra);
 
         log.info("Salvando página {} do usuário {}", p.name(), usuario);
 
