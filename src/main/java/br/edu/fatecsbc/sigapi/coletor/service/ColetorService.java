@@ -113,6 +113,8 @@ public class ColetorService {
 
             // Obtém os dados básicos
             final String nome = client.findElement(By.id("span_MPW0039vPRO_PESSOALNOME")).getText();
+            final String foto = client.findElement(By.id("MPW0039FOTO")).findElement(By.tagName("img"))
+                .getAttribute("src");
             final String ra = client.findElement(By.id("span_MPW0039vACD_ALUNOCURSOREGISTROACADEMICOCURSO")).getText();
             final String instituicao = client.findElement(By.id("span_vUNI_UNIDADENOME_MPAGE")).getText();
             final String curso = client.findElement(By.id("span_vACD_CURSONOME_MPAGE")).getText();
@@ -141,7 +143,7 @@ public class ColetorService {
 
             // Salva página por página
             for (final PAGE p : PAGE.values()) {
-                savePage(client, nome, ra, hash, diretorioUsuario, p);
+                savePage(client, nome, foto, ra, hash, diretorioUsuario, p);
             }
 
         } finally {
@@ -152,8 +154,8 @@ public class ColetorService {
 
     }
 
-    private void savePage(final SigaClient client, final String nome, final String ra, final int hash,
-        final File diretorioUsuario, final PAGE p) {
+    private void savePage(final SigaClient client, final String nome, final String foto, final String ra,
+        final int hash, final File diretorioUsuario, final PAGE p) {
 
         log.info("Salvando pagina {} do aluno {}", p.name(), nome);
 
@@ -168,9 +170,9 @@ public class ColetorService {
             // Obtém o código fonte da página
             String source = client.getPageSource();
 
-            // Substitui nome e RA
-            source = StringUtils.replaceEach(source, new String[] { nome, ra },
-                new String[] { hashString, hashString });
+            // Substitui nome, foto e RA
+            source = StringUtils.replaceEach(source, new String[] { nome, foto, ra },
+                new String[] { hashString, "http://" + hashString + ".jpg", hashString });
 
             // Substitui o email
             source = StringUtils.replacePattern(source, PATTERN_EMAIL, String.format("%1$s@%1$s", hashString));
