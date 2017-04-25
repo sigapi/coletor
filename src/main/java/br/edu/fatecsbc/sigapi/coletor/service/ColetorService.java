@@ -27,7 +27,7 @@ public class ColetorService {
 
     private static final String ARQUIVO_PARTICIPANTES = "participantes.csv";
     private static final String ENCODING = "UTF-8";
-    private static final String PATTERN_EMAIL = "([^.@\\s]+)(\\.[^.@\\s]+)*@([^.@\\s]+\\.)+([^.@\\s]+)";
+    private static final String PATTERN_EMAIL = "[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+";
 
     @Value("${sigapi.coletor.diretorio:/tmp/sigapi/coletor}")
     private String caminhoDiretorioRaiz;
@@ -133,7 +133,7 @@ public class ColetorService {
             }
 
             // Cria o hash
-            final int hash = criarHash(nome, ra);
+            final int hash = new HashCodeBuilder().append(nome).append(ra).append(new Date()).toHashCode();
 
             // Cria o diretório de dados
             final String dirDados = StringUtils
@@ -144,7 +144,7 @@ public class ColetorService {
 
             // Salva página por página
             for (final PAGE p : PAGE.values()) {
-                savePage(client, usuario, nome, foto, ra, diretorioUsuario, p);
+                savePage(client, hash, usuario, nome, foto, ra, diretorioUsuario, p);
             }
 
         } finally {
@@ -158,14 +158,8 @@ public class ColetorService {
 
     }
 
-    private int criarHash(final String nome, final String ra) {
-        return new HashCodeBuilder().append(nome).append(ra).append(new Date()).toHashCode();
-    }
-
-    private void savePage(final SigaClient client, final String usuario, final String nome, final String foto,
-        final String ra, final File diretorioUsuario, final PAGE p) {
-
-        final int hash = criarHash(nome, ra);
+    private void savePage(final SigaClient client, final int hash, final String usuario, final String nome,
+        final String foto, final String ra, final File diretorioUsuario, final PAGE p) {
 
         log.info("Salvando página {} do usuário {}", p.name(), usuario);
 
@@ -185,7 +179,7 @@ public class ColetorService {
                 new String[] { hashString, "http://" + hashString + ".jpg", hashString });
 
             // Substitui o email
-            source = StringUtils.replacePattern(source, PATTERN_EMAIL, String.format("%1$s@%1$s", hashString));
+            source = StringUtils.replacePattern(source, PATTERN_EMAIL, String.format("%1$s@%1$s.com", hashString));
 
             // Escreve o arquivo
             FileUtils.writeStringToFile(new File(diretorioUsuario, p.name()), source, ENCODING);
